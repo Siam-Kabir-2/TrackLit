@@ -127,7 +127,7 @@ export default function DashboardPage() {
                 startAnimation={isLoaded}
                 delay={0.7}
               >
-                <ExpenseCard startAnimation={isLoaded} />
+                <ExpenseCard />
               </AnimatedCard>
 
               {/* Recent Transactions Report */}
