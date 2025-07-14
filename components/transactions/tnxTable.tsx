@@ -1,18 +1,14 @@
 import {
   Plus,
   Minus,
-  Hash,
   FileText,
   Tag,
   Calendar,
   DollarSign,
-  TrendingUp,
-  TrendingDown,
 } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,

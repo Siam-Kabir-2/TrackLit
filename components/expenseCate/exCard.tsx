@@ -1,17 +1,11 @@
 import { BarChart3 } from "lucide-react";
-import { useEffect, useState } from "react";
-import AnimatedProgressBar from "@/components/animations/AnimatedProgressBar";
-import { motion } from "framer-motion";
-import { CartesianGrid, LabelList, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid,  Line, LineChart, XAxis } from "recharts";
 import { TrendingUp } from "lucide-react";
 // import '@/app/globals'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   ChartConfig,
@@ -19,37 +13,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-
-const expenseCategories = [
-  {
-    name: "Food",
-    amount: 1200,
-    color: "bg-red-500",
-    percentage: 37.5,
-    isOverBudget: true,
-  },
-  {
-    name: "Transport",
-    amount: 800,
-    color: "bg-blue-500",
-    percentage: 25,
-    isOverBudget: false,
-  },
-  {
-    name: "Entertainment",
-    amount: 600,
-    color: "bg-amber-500",
-    percentage: 18.75,
-    isOverBudget: false,
-  },
-  {
-    name: "Bills",
-    amount: 600,
-    color: "bg-emerald-500",
-    percentage: 18.75,
-    isOverBudget: false,
-  },
-];
 
 // Chart data for expense trends
 const chartData = [
@@ -79,31 +42,10 @@ const chartConfig = {
     color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
-export default function ExpenseCard({ startAnimation = false }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    if (startAnimation) {
-      // Start card animations after page animation completes
-      const timer = setTimeout(() => {
-        setIsLoaded(true);
-      }, 300); // Delay to let page animation finish first
-
-      return () => clearTimeout(timer);
-    }
-  }, [startAnimation]);
+export default function ExpenseCard() {
   return (
     <>
       <Card className="border-0 shadow-none bg-transparent py-0 space-y-8">
-        {/* <CardHeader className="pb-4 ">
-          <CardTitle className="text-[18px] font-bold text-slate-700 dark:text-slate-200 flex items-center justify-start">
-            <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
-            Expense Categories
-          </CardTitle>
-          <CardDescription className="text-[12px] text-slate-400">
-            Monthly expense trends by category
-          </CardDescription>
-        </CardHeader> */}
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-[18px] font-bold text-slate-700 dark:text-slate-200 flex items-center">
             <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
@@ -178,73 +120,6 @@ export default function ExpenseCard({ startAnimation = false }) {
           </div>
         </CardFooter>
       </Card>
-
-      {/* Commented out original expense categories list */}
-      {/* <div className="flex items-center justify-between mb-6">
-        <h3 className="text-[18px] font-bold text-slate-700 dark:text-slate-200 flex items-center">
-          <BarChart3 className="w-5 h-5 mr-2 text-blue-500" />
-          Expense Categories
-        </h3>
-        <span className="text-[10px] text-slate-400">This Month</span>
-      </div> */}
-
-      {/* <div className="space-y-4">
-        {expenseCategories.map((category, index) => (
-          <div
-            key={category.name}
-            className={`group hover:bg-slate-50 dark:hover:bg-slate-950 p-3 rounded-lg transition-all duration-200 ${
-              category.isOverBudget
-                ? "bg-red-50 dark:bg-orange-200 border border-red-200"
-                : "dark:bg-slate-900"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center space-x-3">
-                <div
-                  className={`w-4 h-4 rounded-full ${category.color} relative`}
-                >
-                  {category.isOverBudget && (
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                  )}
-                </div>
-                <span
-                  className={`font-medium ${
-                    category.isOverBudget
-                      ? "text-red-600"
-                      : "text-slate-700 dark:text-slate-200"
-                  }`}
-                >
-                  {category.name}
-                  {category.isOverBudget && (
-                    <span className="ml-2 text-[10px] bg-red-50 text-red-600 px-1  rounded-full">
-                      Over Budget
-                    </span>
-                  )}
-                </span>
-              </div>
-              <span
-                className={`font-bold ${
-                  category.isOverBudget
-                    ? "text-red-600"
-                    : "text-slate-700 dark:text-slate-200"
-                }`}
-              >
-                -${category.amount.toLocaleString()}
-              </span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <AnimatedProgressBar
-                percentage={category.percentage}
-                color={category.color}
-                backgroundColor="bg-gray-200 dark:bg-white"
-                height="h-2"
-                startAnimation={isLoaded}
-                duration={1.5}
-              />
-            </div>
-          </div>
-        ))}
-      </div> */}
     </>
   );
 }

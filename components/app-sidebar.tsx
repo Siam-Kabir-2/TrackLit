@@ -5,19 +5,16 @@ import {
   ArrowRightLeft,
   WalletCards,
   DollarSign,
-  Settings,
   User2,
   ChevronUp,
 } from "lucide-react";
 import Image from "next/image";
 import { inter } from "@/lib/fonts";
-import DarkModeToggle from "@/components/animations/DarkModeToggle";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -66,12 +63,6 @@ const items = [
 export function AppSidebar() {
   const {
     state,
-    open,
-    setOpen,
-    openMobile,
-    setOpenMobile,
-    isMobile,
-    toggleSidebar,
   } = useSidebar();
 
   return (

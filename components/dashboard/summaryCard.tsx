@@ -1,15 +1,10 @@
 import { StaggeredContainer } from "../animations/AnimatedCard";
 import AnimatedCard from "../animations/AnimatedCard";
-import { motion } from "framer-motion";
 import AnimatedCounter from "@/components/animations/AnimatedCounter";
 import { cn } from "@/lib/utils";
 import {
   TrendingUp,
   TrendingDown,
-  DollarSign,
-  PieChart,
-  BarChart3,
-  Activity,
 } from "lucide-react";
 
 // Define the component props interface
@@ -18,9 +13,6 @@ interface SummaryCardsProps {
   sidebarIsLoaded: boolean;
 }
 
-// Sample data
-const totalBudget = 5000;
-const totalExpenses = 3200;
 
 const cardsInfo = [
   {
@@ -220,7 +212,7 @@ export default function SummaryCards({
     >
       {cardsInfo.map((card, index) => {
         return (
-          <AnimatedCard
+          <AnimatedCard key={index}
             className={cn(
               `bg-gradient-to-r ${card.gradient} rounded-2xl p-6 ${card.textColor} shadow-xl`
             )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 interface AnimatedCounterProps {
@@ -26,7 +26,6 @@ export default function AnimatedCounter({
   const [count, setCount] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  const controls = useAnimation();
 
   useEffect(() => {
     if (startAnimation && isInView) {

@@ -9,11 +9,6 @@ import PieChartAnalytics from "@/components/dashboard/pieChart";
 import AnimatedCard, {
   StaggeredContainer,
 } from "@/components/animations/AnimatedCard";
-import { FloatingActionButton } from "@/components/animations/AnimatedButton";
-import { useNotification } from "@/components/animations/AnimatedNotification";
-import AnimatedNotification from "@/components/animations/AnimatedNotification";
-import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
 import Image from "next/image";
@@ -23,20 +18,10 @@ export default function DashboardPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const { state, isMobile } = useSidebar();
   const isCollapsed = state === "collapsed";
-  const { notifications, showNotification, hideNotification } =
-    useNotification();
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
-
-  const handleAddTransaction = () => {
-    showNotification(
-      "success",
-      "Transaction Added!",
-      "Your new transaction has been successfully recorded."
-    );
-  };
 
   return (
     <>

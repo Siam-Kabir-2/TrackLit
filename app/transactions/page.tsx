@@ -5,7 +5,7 @@ import { useSidebar, SidebarTrigger } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
 import AnimatedCard from "@/components/animations/AnimatedCard";
-import { Search, Plus, Filter, Download, Calendar } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -13,8 +13,7 @@ export default function TnxPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
-  const { state, isMobile } = useSidebar();
-  const isCollapsed = state === "collapsed";
+  const { isMobile } = useSidebar();
 
   useEffect(() => {
     setIsLoaded(true);
