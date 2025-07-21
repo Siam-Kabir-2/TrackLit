@@ -1,9 +1,6 @@
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
 import { LoginForm } from "@/components/AuthForms/login-form";
 import Image from "next/image";
-import { useActionState } from "react";
-import { authenticate } from "@/lib/actions";
-import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   

@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { authenticate } from "@/lib/actions";
 import {AlertCircle} from "lucide-react"
+import Image from "next/image";
 
 export function LoginForm({
   className,
@@ -15,7 +16,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [errorMessage, formAction, isPending] = useActionState(
+  const [errorMessage, formAction] = useActionState(
     authenticate,
     undefined
   );
@@ -120,7 +121,7 @@ export function LoginForm({
               </div>
             </form>
             <div className="bg-muted relative hidden md:block">
-              <img
+              <Image
                 src="/login-image.jpeg"
                 alt="Image"
                 className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.6] "

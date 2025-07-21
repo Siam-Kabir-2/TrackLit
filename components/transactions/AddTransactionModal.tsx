@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-export default function AddTransactionModal({ onClose }) {
+export default function AddTransactionModal({ onClose }: { onClose: () => void }) {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [type, setType] = useState("expense");
@@ -26,7 +26,13 @@ export default function AddTransactionModal({ onClose }) {
             ✕
           </Button>
         </div>
-        <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); onClose(); }}>
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            onClose();
+          }}
+        >
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Description
@@ -36,7 +42,7 @@ export default function AddTransactionModal({ onClose }) {
               placeholder="Enter transaction description"
               className="w-full"
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -49,7 +55,7 @@ export default function AddTransactionModal({ onClose }) {
                 placeholder="0.00"
                 className="w-full"
                 value={amount}
-                onChange={e => setAmount(e.target.value)}
+                onChange={(e) => setAmount(e.target.value)}
               />
             </div>
             <div>
@@ -59,7 +65,7 @@ export default function AddTransactionModal({ onClose }) {
               <select
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-slate-200"
                 value={type}
-                onChange={e => setType(e.target.value)}
+                onChange={(e) => setType(e.target.value)}
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -73,7 +79,7 @@ export default function AddTransactionModal({ onClose }) {
             <select
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-slate-200"
               value={category}
-              onChange={e => setCategory(e.target.value)}
+              onChange={(e) => setCategory(e.target.value)}
             >
               <option value="food">Food</option>
               <option value="transport">Transport</option>
@@ -92,7 +98,7 @@ export default function AddTransactionModal({ onClose }) {
               type="date"
               className="w-full"
               value={date}
-              onChange={e => setDate(e.target.value)}
+              onChange={(e) => setDate(e.target.value)}
             />
           </div>
           <div className="flex gap-3 pt-4">

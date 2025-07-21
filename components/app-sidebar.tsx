@@ -1,13 +1,11 @@
 "use client";
 import {
-  ChartColumnIcon,
   LayoutDashboard,
   ArrowRightLeft,
   WalletCards,
   DollarSign,
   User2,
   ChevronUp,
-  LogOut,
 } from "lucide-react";
 import Image from "next/image";
 import { inter } from "@/lib/fonts";

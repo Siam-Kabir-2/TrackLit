@@ -12,7 +12,6 @@ export async function TransactionsInfo({
 }: TxnCardProps) {
   const transactions = await getTransactions();
   const isTransactionsPage = pathName === "/transactions";
-console.log(transactions)
   // Filter transactions based on search term
   const filteredTransactions = transactions?.filter(
     (transaction) =>

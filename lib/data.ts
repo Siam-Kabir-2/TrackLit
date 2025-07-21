@@ -1,5 +1,4 @@
 import { PrismaClient } from "./generated/prisma";
-import { currUser } from "./actions";
 import { auth } from "@/auth";
 
 const globalForPrisma = globalThis as unknown as {

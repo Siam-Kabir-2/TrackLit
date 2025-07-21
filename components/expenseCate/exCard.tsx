@@ -40,7 +40,7 @@ const chartConfig = {
     color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
-export default function ExpenseCard(isLoaded:any) {
+export default function ExpenseCard(isLoaded:boolean) {
   return (
     <>
       <AnimatedCard

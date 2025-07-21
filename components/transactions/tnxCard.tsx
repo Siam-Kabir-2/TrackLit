@@ -35,7 +35,7 @@ export function TransactionCard({
         >
           <div className="flex items-center space-x-4">
             <div
-              className={`w-10 h-10 rounded-full flex items-center justify-center ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center ${
                 transaction.type === "INCOME"
                   ? "bg-emerald-100 dark:bg-emerald-900/30"
                   : "bg-red-100 dark:bg-red-900/30"
@@ -56,17 +56,17 @@ export function TransactionCard({
               </span>
             </div>
             <div>
-              <p className="font-medium text-slate-700 dark:text-slate-200">
+              <p className="font-medium text-sm text-slate-700 dark:text-slate-200">
                 {transaction.description}
               </p>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                {transaction.category} • {transaction.transactionDate.toLocaleString()}
+                {transaction.category} • {transaction.transactionDate.toLocaleDateString()}
               </p>
             </div>
           </div>
           <div className="text-right">
             <p
-              className={`font-bold text-[16px] ml-5 ${
+              className={`font-bold text-[14px] ml-5 ${
                 transaction.type === "INCOME"
                   ? "text-emerald-500"
                   : "text-red-500"
