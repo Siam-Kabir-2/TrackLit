@@ -10,7 +10,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import AnimatedCard from "../animations/AnimatedCard";
 
 // Chart data for expense trends
 const chartData = [
@@ -40,13 +39,11 @@ const chartConfig = {
     color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
-export default function ExpenseCard(isLoaded:boolean) {
+export default function ExpenseCard() {
   return (
     <>
-      <AnimatedCard
+      <div
         className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-gray-700"
-        startAnimation={isLoaded}
-        delay={0.7}
       >
         <Card className="border-0 shadow-none bg-transparent py-0 space-y-8">
           <div className="flex items-center justify-between mb-6">
@@ -124,7 +121,7 @@ export default function ExpenseCard(isLoaded:boolean) {
             </div>
           </CardFooter>
         </Card>
-      </AnimatedCard>
+      </div>
     </>
   );
 }
