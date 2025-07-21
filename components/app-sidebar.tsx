@@ -7,6 +7,7 @@ import {
   DollarSign,
   User2,
   ChevronUp,
+  LogOut,
 } from "lucide-react";
 import Image from "next/image";
 import { inter } from "@/lib/fonts";
@@ -30,6 +31,9 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { MobileNav } from "./mobile-nav";
+import DarkModeToggle from "./animations/DarkModeToggle";
+import { handleSignOut } from "@/lib/actions";
 
 // Menu items.
 const items = [
@@ -44,11 +48,6 @@ const items = [
     icon: ArrowRightLeft,
   },
   {
-    title: "Reports",
-    url: "/reports",
-    icon: ChartColumnIcon,
-  },
-  {
     title: "Budgets",
     url: "/budgets",
     icon: DollarSign,
@@ -60,128 +59,122 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
-  const {
-    state,
-  } = useSidebar();
+export function AppSidebar({ user }: { user?: string }) {
+  const { state, isMobile } = useSidebar();
 
-  return (
-    <Sidebar collapsible="icon" variant="sidebar" className="">
-      {/* Background Image */}
-      {/* <div className="absolute inset-0 z-0 ">
-        <Image
-          src="/sidebar-bg.svg"
-          alt="Sidebar Background"
-          fill
-          className="object-cover opacity-40"
-          priority
-        />
-      </div> */}
-
-      {/* Overlay for better readability */}
-      {/* <div className="absolute inset-0 bg-black/20 z-10"></div> */}
-      {/* Content with higher z-index */}
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem
-            className={`${inter.variable} flex justify-between items-start mt-4`}
-          >
-            <div
-              className={cn(
-                "flex flex-col"
-              )}
+  if (isMobile) {
+    return <MobileNav />;
+  } else
+    return (
+      <Sidebar collapsible="icon" variant="sidebar" className="">
+        <SidebarHeader>
+          <SidebarMenu>
+            <SidebarMenuItem
+              className={`${inter.variable} flex justify-between items-start mt-4`}
             >
-              <div className="relative">
-                <Image
-                  aria-hidden
-                  src="/tracklit.svg"
-                  alt="Website Logo"
-                  width={58}
-                  height={0}
-                  className="block"
-                />
-                {/* Invisible SidebarTrigger overlay */}
-                <SidebarTrigger
-                  className={cn(
-                    "absolute left-0.5 top-0.5 inset-0 opacity-0 cursor-pointer w-full h-full",
-                    state === "expanded" && "hidden h-0 w-0"
-                  )}
-                />
+              <div className={cn("flex flex-col")}>
+                <div className="relative">
+                  <Image
+                    aria-hidden
+                    src="/tracklit.svg"
+                    alt="Website Logo"
+                    width={58}
+                    height={0}
+                    className="block"
+                  />
+                  {/* Invisible SidebarTrigger overlay */}
+                  <SidebarTrigger
+                    className={cn(
+                      "absolute left-0.5 top-0.5 inset-0 opacity-0 cursor-pointer w-full h-full",
+                      state === "expanded" && "hidden h-0 w-0"
+                    )}
+                  />
+                </div>
+                {/* Hide text when sidebar is collapsed */}
+                <div
+                  className={`ml-2 tracking-tight transition-all duration-300 ease-in-out ${
+                    state === "collapsed"
+                      ? "opacity-0 max-w-0 overflow-hidden ml-0"
+                      : "opacity-100 max-w-xs"
+                  }`}
+                >
+                  <p className="text-3xl text-success font-bold whitespace-nowrap">
+                    TrackLit
+                  </p>
+                  <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-200 whitespace-nowrap">
+                    Stay On Track
+                  </p>
+                </div>
               </div>
-              {/* Hide text when sidebar is collapsed */}
-              <div
-                className={`ml-2 tracking-tight transition-all duration-300 ease-in-out ${
-                  state === "collapsed"
-                    ? "opacity-0 max-w-0 overflow-hidden ml-0"
-                    : "opacity-100 max-w-xs"
-                }`}
-              >
-                <p className="text-3xl text-success font-bold whitespace-nowrap">
-                  TrackLit
-                </p>
-                <p className="text-[12px] font-semibold text-slate-600 dark:text-slate-200 whitespace-nowrap">
-                  Stay On Track
-                </p>
+              <SidebarTrigger
+                className={cn(state === "collapsed" && "hidden h-0 w-0")}
+              />
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarGroup>
+            {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <a href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <div className="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2">
+                <DarkModeToggle />
+                <span className={state === "collapsed" ? "sr-only" : ""}>
+                  Dark Mode
+                </span>
               </div>
-            </div>
-            <SidebarTrigger
-              className={cn(state === "collapsed" && "hidden h-0 w-0")}
-            />
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton>
+                    <User2 /> {user}
+                    <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <div className="flex items-center justify-between w-full p-2">
-              {/* <DarkModeToggle /> */}
-            </div>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className={` [--radix-popper-anchor-width]`}
-              >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
-  );
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side="top"
+                  className={` [--radix-popper-anchor-width] w-full`}
+                >
+                  <DropdownMenuItem>
+                    <span>Account</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <span>Billing</span>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <form action={handleSignOut} className="w-full">
+                      <button
+                        type="submit"
+                        className="flex w-full items-center  text-sm hover:bg-destructive/10 hover:text-destructive rounded-sm"
+                      >
+                        <span>Sign out</span>
+                      </button>
+                    </form>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+    );
 }

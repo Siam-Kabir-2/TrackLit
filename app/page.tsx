@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, BarChart3, DollarSign, PieChart, Shield, Smartphone, TrendingUp } from "lucide-react";
+import DarkModeToggle from "@/components/animations/DarkModeToggle";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Header */}
-      <header className="container mx-auto px-4 py-6">
+      <header className="container mx-auto px-5 py-6">
         <nav className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Image
@@ -35,6 +36,7 @@ export default function Home() {
               Sign Up
               <ArrowRight className="w-4 h-4" />
             </Link>
+            <DarkModeToggle/>
           </div>
         </nav>
       </header>

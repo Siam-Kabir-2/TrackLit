@@ -1,7 +1,8 @@
+// 'use client'
 import { PieChart } from "lucide-react";
 import { AnimatedCircularProgress } from "@/components/animations/AnimatedProgressBar";
 import AnimatedCounter from "@/components/animations/AnimatedCounter";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 // // Sample data
 //   const totalBudget = 5000;
 //   const totalExpenses = 3200;
@@ -21,11 +22,8 @@ export default function PieChartAnalytics({
   const percentage = (totalExpenses / totalBudget) * 100;
   return (
     <div className="bg-whiite dark:bg-gray-800 rounded-2xl p-6 shadow-xl border border-gray-200 dark:border-gray-700">
-      <motion.div
+      <div
         className="flex items-center justify-between mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
       >
         <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center">
           <PieChart className="w-5 h-5 mr-2 text-emerald-500" />
@@ -39,7 +37,7 @@ export default function PieChartAnalytics({
             duration={2}
           />
         </span>
-      </motion.div>
+      </div>
 
       {/* Circular Progress */}
       <div className="flex justify-center mb-6">
@@ -55,12 +53,12 @@ export default function PieChartAnalytics({
       </div>
 
       {/* Budget Breakdown */}
-      <motion.div
+      {/* <motion.div
         className="space-y-3"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
-      >
+      > */}
         <div className="flex justify-between items-center">
           <span className="text-slate-600 dark:text-slate-300">
             Total Budget
@@ -99,7 +97,7 @@ export default function PieChartAnalytics({
             />
           </span>
         </div>
-      </motion.div>
+      {/* </motion.div> */}
     </div>
   );
 }

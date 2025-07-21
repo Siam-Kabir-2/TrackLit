@@ -1,58 +1,20 @@
-import { usePathname } from "next/navigation";
 import { TransactionCard } from "./tnxCard";
 import { TransactionTable } from "./tnxTable";
-
+import { getTransactions } from "@/lib/data";
 export interface TxnCardProps {
-  startAnimation: boolean;
-  onMobile?: boolean;
   searchTerm?: string;
+  pathName?: string; // Add this prop to receive real data
 }
 
-const recentTransactions = [
-  {
-    id: 1,
-    description: "Grocery Store",
-    amount: -85.5,
-    category: "Food",
-    date: "Today",
-    type: "expense" as const,
-  },
-  {
-    id: 2,
-    description: "Salary",
-    amount: 3200.0,
-    category: "Income",
-    date: "2 days ago",
-    type: "income" as const,
-  },
-  {
-    id: 3,
-    description: "Coffee Shop",
-    amount: -4.5,
-    category: "Food",
-    date: "Yesterday",
-    type: "expense" as const,
-  },
-  {
-    id: 4,
-    description: "Gas Station",
-    amount: -45.0,
-    category: "Transport",
-    date: "3 days ago",
-    type: "expense" as const,
-  },
-];
-
-export function TransactionsInfo({
-  startAnimation,
-  onMobile,
+export async function TransactionsInfo({
   searchTerm = "",
+  pathName,
 }: TxnCardProps) {
-  const pathName = usePathname();
+  const transactions = await getTransactions();
   const isTransactionsPage = pathName === "/transactions";
-
+console.log(transactions)
   // Filter transactions based on search term
-  const filteredTransactions = recentTransactions.filter(
+  const filteredTransactions = transactions?.filter(
     (transaction) =>
       transaction.description
         .toLowerCase()
@@ -61,8 +23,8 @@ export function TransactionsInfo({
   );
 
   const displayTransactions = isTransactionsPage
-    ? filteredTransactions
-    : filteredTransactions.slice(0, 4);
+    ? filteredTransactions ?? []
+    : (filteredTransactions ?? []).slice(0, 4);
 
   return (
     <>
@@ -80,16 +42,9 @@ export function TransactionsInfo({
       )}
 
       {isTransactionsPage ? (
-        <TransactionTable
-          transactions={displayTransactions}
-          startAnimation={startAnimation}
-        />
+        <TransactionTable transactions={displayTransactions} />
       ) : (
-        <TransactionCard
-          transactions={displayTransactions}
-          startAnimation={startAnimation}
-          onMobile={onMobile}
-        />
+        <TransactionCard transactions={displayTransactions} />
       )}
     </>
   );

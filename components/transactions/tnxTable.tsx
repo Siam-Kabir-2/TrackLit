@@ -1,11 +1,6 @@
-import {
-  Plus,
-  Minus,
-  FileText,
-  Tag,
-  Calendar,
-  DollarSign,
-} from "lucide-react";
+// 'use client'
+// import { useSidebar } from "../ui/sidebar";
+import { Plus, Minus, FileText, Tag, Calendar, DollarSign } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -17,33 +12,29 @@ import {
 import { TransactionCard } from "./tnxCard";
 
 interface Transaction {
-  id: number;
+  id: string;
   description: string;
   amount: number;
   category: string;
-  date: string;
-  type: "income" | "expense";
+  transactionDate: Date;
+  type: "INCOME" | "EXPENSE";
 }
 
 interface TransactionTableProps {
   transactions: Transaction[];
-  startAnimation: boolean;
-  onMobile?:boolean;
 }
 
 export function TransactionTable({
-  transactions,
-  startAnimation,
-  onMobile
+  transactions
 }: TransactionTableProps) {
+  // const onMobile=true;
+  const startAnimation=true;
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
       {/* Mobile View - Use existing TnxCard component */}
       <div className="block md:hidden">
         <TransactionCard
           transactions={transactions}
-          startAnimation={startAnimation}
-          onMobile={onMobile}
         />
       </div>
 
@@ -93,19 +84,19 @@ export function TransactionTable({
                   <div className="flex items-center space-x-3">
                     <div
                       className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-sm border-2 transition-all duration-200 ${
-                        tnx.type === "income"
+                        tnx.type === "INCOME"
                           ? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800"
                           : "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
                       }`}
                     >
                       <span
                         className={`${
-                          tnx.type === "income"
+                          tnx.type === "INCOME"
                             ? "text-emerald-600 dark:text-emerald-400"
                             : "text-red-600 dark:text-red-400"
                         }`}
                       >
-                        {tnx.type === "income" ? (
+                        {tnx.type === "INCOME" ? (
                           <Plus size={16} />
                         ) : (
                           <Minus size={16} />
@@ -122,7 +113,7 @@ export function TransactionTable({
                 <TableCell className="py-4">
                   <span
                     className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm border transition-all duration-200 ${
-                      tnx.type === "income"
+                      tnx.type === "INCOME"
                         ? "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-800"
                         : "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800"
                     }`}
@@ -133,7 +124,7 @@ export function TransactionTable({
                 <TableCell className="py-4">
                   <div className="flex flex-col">
                     <span className="text-slate-700 dark:text-slate-300 font-medium">
-                      {tnx.date}
+                      {tnx.transactionDate.toLocaleString()}
                     </span>
                     <span className="text-xs text-slate-500 dark:text-slate-400">
                       {new Date().toLocaleDateString()}
@@ -144,16 +135,16 @@ export function TransactionTable({
                   <div className="flex flex-col items-end">
                     <span
                       className={`font-bold text-lg transition-all duration-200 ${
-                        tnx.type === "income"
+                        tnx.type === "INCOME"
                           ? "text-emerald-600 dark:text-emerald-400"
                           : "text-red-600 dark:text-red-400"
                       }`}
                     >
-                      {tnx.type === "income" ? "+" : "-"}$
+                      {tnx.type === "INCOME" ? "+" : "-"}$
                       {Math.abs(tnx.amount).toFixed(2)}
                     </span>
                     <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                      {tnx.type === "income" ? "Credit" : "Debit"}
+                      {tnx.type === "INCOME" ? "Credit" : "Debit"}
                     </span>
                   </div>
                 </TableCell>

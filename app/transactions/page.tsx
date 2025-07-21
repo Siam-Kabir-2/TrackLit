@@ -1,8 +1,6 @@
-"use client";
+// "use client";
 import { TransactionsInfo } from "@/components/transactions/transactions";
 import { useEffect, useState } from "react";
-import { useSidebar, SidebarTrigger } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
 import AnimatedCard from "@/components/animations/AnimatedCard";
 import { Search, Plus } from "lucide-react";
@@ -13,7 +11,7 @@ export default function TnxPage() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
-  const { isMobile } = useSidebar();
+
 
   useEffect(() => {
     setIsLoaded(true);
@@ -26,12 +24,10 @@ export default function TnxPage() {
         <div className="text-[26px] font-bold text-black dark:text-white">
           Transactions
         </div>
-        <DarkModeToggle />
+        <div className="hidden md:block">
+          <DarkModeToggle />
+        </div>
       </div>
-
-      {/* Mobile Sidebar Trigger */}
-      <SidebarTrigger className={cn("hidden", isMobile && "block fixed m-1")} />
-
       {/* Main Content */}
       <div className="z-1 p-4 md:p-6  bg-transparent transition-all duration-700">
         {/* Search and Actions Bar */}
@@ -78,8 +74,7 @@ export default function TnxPage() {
             delay={0.1}
           >
             <TransactionsInfo
-              startAnimation={isLoaded}
-              onMobile={isMobile}
+              pathName="/transactions"
               searchTerm={searchTerm}
             />
           </AnimatedCard>
