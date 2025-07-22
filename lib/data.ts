@@ -23,13 +23,13 @@ export async function getUser(email: string) {
 
 export async function getTransactions() {
   const session = await auth();
-   if (!session?.user?.email) {
+  if (!session?.user?.email) {
     return null;
   }
 
   // Fetch full user data from database
   const user = await getUser(session.user.email);
-  
+
   try {
     const transactions = await prisma.transaction.findMany({
       where: {

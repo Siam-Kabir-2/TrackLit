@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { inter } from "@/lib/fonts";
 import {
   DropdownMenu,
@@ -22,7 +21,6 @@ import {
   DropdownMenuItem,
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
 
 // Menu items.
@@ -56,8 +54,6 @@ const items = [
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
-
   return (
     <>
       {/* Mobile Top Navigation Bar */}
@@ -104,61 +100,42 @@ export function MobileNav() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {/* Menu Toggle */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  aria-label="Open menu"
+                >
+                  {isOpen ? <X size={20} /> : <Menu size={20} />}
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-40">
+                {items.map((item) => (
+                  <DropdownMenuItem
+                    key={item.title}
+                    asChild
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3"
+                  >
+                    <Link
+                      href={item.url}
+                      className="w-full flex items-center gap-3"
+                    >
+                      <item.icon size={18} />
+                      <span className="text-sm">{item.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuItem className="flex items-center gap-3">
+                  <DarkModeToggle />
+                  <span className="text-sm text-gray-700 dark:text-gray-300">
+                    Dark Mode
+                  </span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
-
-        {/* Mobile Menu Dropdown */}
-        {isOpen && (
-          <div className="border-t border-gray-200 dark:border-gray-800 bg-white/95 backdrop-blur-md dark:bg-gray-900/95 shadow-lg">
-            <div className="p-4 space-y-1">
-              {items.map((item) => {
-                const isActive = pathname === item.url;
-                return (
-                  <Link
-                    key={item.title}
-                    href={item.url}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 p-3 rounded-lg transition-colors",
-                      isActive
-                        ? "bg-success/10 text-success font-medium"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300"
-                    )}
-                  >
-                    <item.icon size={18} />
-                    <span className="text-sm">{item.title}</span>
-                  </Link>
-                );
-              })}
-
-              {/* Dark Mode Toggle - Only in mobile dropdown */}
-              <div className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                <span className="text-sm text-gray-700 dark:text-gray-300">
-                  Dark Mode
-                </span>
-                <DarkModeToggle />
-              </div><div
-                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
-                onClick={() => {
-                  const darkModeButton = document.querySelector(
-                    "[data-dark-mode-toggle]"
-                  ) as HTMLElement;
-                  if (darkModeButton) {
-                    darkModeButton.click();
-                  }
-                }}
-              />
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
