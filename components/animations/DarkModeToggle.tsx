@@ -39,8 +39,8 @@ export default function DarkModeToggle() {
   return (
     <motion.button data-dark-mode-toggle 
       onClick={toggleTheme}
-      className="relative w-4 h-4 rounded-full shadow-md flex items-center justify-center transition-colors duration-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-      whileHover={{ scale: 1.1 }}
+      className="relative w-4 h-4 rounded-full  flex items-center justify-center transition-colors duration-300 "
+      // whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
     >
       <motion.div

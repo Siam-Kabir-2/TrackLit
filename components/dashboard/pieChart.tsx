@@ -2,6 +2,7 @@
 import { PieChart } from "lucide-react";
 import { AnimatedCircularProgress } from "@/components/animations/AnimatedProgressBar";
 import AnimatedCounter from "@/components/animations/AnimatedCounter";
+import { getTotalTransactionsSummary } from "@/lib/data";
 // import { motion } from "framer-motion";
 // // Sample data
 //   const totalBudget = 5000;
@@ -9,15 +10,11 @@ import AnimatedCounter from "@/components/animations/AnimatedCounter";
 //   const remaining = totalBudget - totalExpenses;
 //   const percentage = (totalExpenses / totalBudget) * 100;
 
-interface PieChartAnalyticsProps {
-  totalBudget?: number;
-  totalExpenses?: number;
-}
 
-export default function PieChartAnalytics({
-  totalBudget = 5000,
-  totalExpenses = 3200,
-}: PieChartAnalyticsProps) {
+export default async function PieChartAnalytics() {
+  const totalTnxSummary=await getTotalTransactionsSummary();
+  const totalBudget=totalTnxSummary?.totalIncome || 0;
+  const totalExpenses=totalTnxSummary?.totalExpense || 0;
   const remaining = totalBudget - totalExpenses;
   const percentage = (totalExpenses / totalBudget) * 100;
   return (

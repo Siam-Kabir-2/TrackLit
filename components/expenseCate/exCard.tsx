@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { BarChart3 } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import { TrendingUp } from "lucide-react";
@@ -12,39 +12,50 @@ import {
 } from "@/components/ui/chart";
 
 // Chart data for expense trends
-const chartData = [
-  { month: "Jan", food: 2000, transport: 1500, entertainment: 800, bills: 900 },
-  { month: "Feb", food: 1100, transport: 750, entertainment: 450, bills: 550 },
-  { month: "Mar", food: 1450, transport: 800, entertainment: 100, bills: 880 },
-  { month: "Apr", food: 1200, transport: 420, entertainment: 550, bills: 600 },
-  { month: "May", food: 1250, transport: 780, entertainment: 280, bills: 590 },
-  { month: "Jun", food: 1700, transport: 500, entertainment: 700, bills: 300 },
-];
-
+// const chartData = [
+//   { month: "Jan", food: 2000, transport: 1500, entertainment: 800, bills: 900 },
+//   { month: "Feb", food: 1100, transport: 750, entertainment: 450, bills: 550 },
+//   { month: "Mar", food: 1450, transport: 800, entertainment: 100, bills: 880 },
+//   { month: "Apr", food: 1200, transport: 420, entertainment: 550, bills: 600 },
+//   { month: "May", food: 1250, transport: 780, entertainment: 280, bills: 590 },
+//   { month: "Jun", food: 1700, transport: 500, entertainment: 700, bills: 300 },
+// ];
+type ExCardProps = {
+  chartData: any[];
+};
 const chartConfig = {
-  food: {
+  FOOD: {
     label: "Food",
     color: "hsl(var(--chart-1))",
   },
-  transport: {
+  TRANSPORT: {
     label: "Transport",
     color: "hsl(var(--chart-2))",
   },
-  entertainment: {
+  ENTERTAINMENT: {
     label: "Entertainment",
     color: "hsl(var(--chart-3))",
   },
-  bills: {
+  BILLS: {
     label: "Bills",
     color: "hsl(var(--chart-4))",
   },
 } satisfies ChartConfig;
-export default function ExpenseCard() {
+
+export default function ExpenseCard({ chartData }: ExCardProps) {
+  const lastMonth = chartData[chartData.length - 2]?.FOOD ?? 0;
+  const thisMonth = chartData[chartData.length - 1]?.FOOD ?? 0;
+  const foodChange =
+    lastMonth === 0 ? 0 : ((thisMonth - lastMonth) / lastMonth) * 100;
+  const foodChangeText =
+    lastMonth === 0
+      ? "No data for last month"
+      : `Food expenses ${
+          foodChange > 0 ? "increased" : "decreased"
+        } by ${Math.abs(foodChange).toFixed(1)}% this month`;
   return (
     <>
-      <div
-        className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-gray-700"
-      >
+      <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-gray-700">
         <Card className="border-0 shadow-none bg-transparent py-0 space-y-8">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-[18px] font-bold text-slate-700 dark:text-slate-200 flex items-center">
@@ -76,21 +87,21 @@ export default function ExpenseCard() {
                   content={<ChartTooltipContent />}
                 />
                 <Line
-                  dataKey="food"
+                  dataKey="FOOD"
                   type="monotone"
                   stroke="green"
                   strokeWidth={2}
                   dot={{ fill: "green", strokeWidth: 0, r: 3 }}
                 />
                 <Line
-                  dataKey="transport"
+                  dataKey="TRANSPORT"
                   type="monotone"
                   stroke="blue"
                   strokeWidth={2}
                   dot={{ fill: "blue", strokeWidth: 0, r: 3 }}
                 />
                 <Line
-                  dataKey="entertainment"
+                  dataKey="ENTERTAINMENT"
                   type="monotone"
                   stroke="purple"
                   strokeWidth={2}
@@ -101,7 +112,7 @@ export default function ExpenseCard() {
                   }}
                 />
                 <Line
-                  dataKey="bills"
+                  dataKey="BILLS"
                   type="monotone"
                   stroke="red"
                   strokeWidth={2}
@@ -114,7 +125,7 @@ export default function ExpenseCard() {
           <CardFooter className="flex-col items-start gap-2 text-sm px-0">
             <div className="flex items-center gap-2 font-medium leading-none text-slate-700 dark:text-slate-200">
               <TrendingUp className="h-4 w-4 text-emerald-500" />
-              Food expenses increased by 20% this month
+              {foodChangeText}
             </div>
             <div className="leading-none text-slate-500 dark:text-slate-400 text-xs">
               Showing expense trends for the last 6 months

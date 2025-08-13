@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono , Inter} from "next/font/google";
+import { Geist, Geist_Mono , Inter,Ubuntu} from "next/font/google";
 
 export const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,3 +15,8 @@ export const inter = Inter({
   subsets: ["latin"],
 });
 
+export const ubuntu= Ubuntu({
+  weight:["400","500","700"],
+  variable:"--font-ubuntu",
+  subsets:["latin"]
+})

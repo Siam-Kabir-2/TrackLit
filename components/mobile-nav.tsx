@@ -2,19 +2,15 @@
 
 import { useState } from "react";
 import {
-  ChartColumnIcon,
   LayoutDashboard,
   ArrowRightLeft,
-  WalletCards,
-  DollarSign,
-  User2,
   Menu,
   X,
-  ChevronDown,
+  LogOut
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { inter } from "@/lib/fonts";
+import {  ubuntu } from "@/lib/fonts";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -35,24 +31,24 @@ const items = [
     url: "/transactions",
     icon: ArrowRightLeft,
   },
-  {
-    title: "Reports",
-    url: "/reports",
-    icon: ChartColumnIcon,
-  },
-  {
-    title: "Budgets",
-    url: "/budgets",
-    icon: DollarSign,
-  },
-  {
-    title: "Accounts",
-    url: "/accounts",
-    icon: WalletCards,
-  },
+  // {
+  //   title: "Reports",
+  //   url: "/reports",
+  //   icon: ChartColumnIcon,
+  // },
+  // {
+  //   title: "Budgets",
+  //   url: "/budgets",
+  //   icon: DollarSign,
+  // },
+  // {
+  //   title: "Accounts",
+  //   url: "/accounts",
+  //   icon: WalletCards,
+  // },
 ];
 
-export function MobileNav() {
+export function MobileNav({ user }: { user?: string }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -62,7 +58,7 @@ export function MobileNav() {
           {/* Logo */}
           <Link
             href="/dashboard"
-            className={`${inter.variable} flex items-center gap-2`}
+            className={`${ubuntu.variable} flex items-center gap-2`}
           >
             <Image
               src="/tracklit.svg"
@@ -81,25 +77,16 @@ export function MobileNav() {
           {/* Right side - User menu and hamburger */}
           <div className="flex items-center gap-2">
             {/* User Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-1 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-                  <User2 size={18} />
-                  <ChevronDown size={14} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5">
+                <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">
+                    {user?.charAt(0).toUpperCase() || "G"}
+                  </span>
+                </div>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-20 truncate">
+                  {user || "Guest"}
+                </span>
+              </div>
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger asChild>
                 <button
@@ -110,6 +97,20 @@ export function MobileNav() {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40">
+                  <div className={`${ubuntu.variable} flex items-center gap-2 p-[5px] pb-2`}>
+                    <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
+                      <span className="text-white text-sm font-bold">
+                        {user?.charAt(0).toUpperCase() || "G"}
+                      </span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-success">{user}</p>
+                      <p className="text-[8px] font-semibold text-gray-600 dark:text-gray-400 leading-none">
+                        Welcome Back!
+                      </p>
+                    </div>
+                  </div>
+                <hr />
                 {items.map((item) => (
                   <DropdownMenuItem
                     key={item.title}
@@ -126,11 +127,27 @@ export function MobileNav() {
                     </Link>
                   </DropdownMenuItem>
                 ))}
-                <DropdownMenuItem className="flex items-center gap-3">
+                <DropdownMenuItem
+                  className="flex items-center gap-3 "
+                  onClick={(e) => {
+                    // Prevent event bubbling and find the toggle button
+                    e.preventDefault();
+                    const toggleButton = e.currentTarget.querySelector(
+                      "[data-dark-mode-toggle]"
+                    ) as HTMLButtonElement;
+                    if (toggleButton) {
+                      toggleButton.click();
+                    }
+                  }}
+                >
                   <DarkModeToggle />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Dark Mode
-                  </span>
+                  <span>Dark Mode</span>
+                  {/* </button> */}
+                </DropdownMenuItem>
+                <hr />
+                <DropdownMenuItem className="w-full flex items-center gap-3">
+                  <LogOut size={18}/>
+                  <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

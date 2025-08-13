@@ -2,8 +2,6 @@
 import {
   LayoutDashboard,
   ArrowRightLeft,
-  WalletCards,
-  DollarSign,
   User2,
   ChevronUp,
 } from "lucide-react";
@@ -32,6 +30,9 @@ import { cn } from "@/lib/utils";
 import { MobileNav } from "./mobile-nav";
 import DarkModeToggle from "./animations/DarkModeToggle";
 import { handleSignOut } from "@/lib/actions";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import clsx from "clsx";
 
 // Menu items.
 const items = [
@@ -45,23 +46,24 @@ const items = [
     url: "/transactions",
     icon: ArrowRightLeft,
   },
-  {
-    title: "Budgets",
-    url: "/budgets",
-    icon: DollarSign,
-  },
-  {
-    title: "Accounts",
-    url: "/accounts",
-    icon: WalletCards,
-  },
+  // {
+  //   title: "Budgets",
+  //   url: "/budgets",
+  //   icon: DollarSign,
+  // },
+  // {
+  //   title: "Accounts",
+  //   url: "/accounts",
+  //   icon: WalletCards,
+  // },
 ];
 
 export function AppSidebar({ user }: { user?: string }) {
+  const pathName = usePathname();
   const { state, isMobile } = useSidebar();
 
   if (isMobile) {
-    return <MobileNav />;
+    return <MobileNav user={user} />;
   } else
     return (
       <Sidebar collapsible="icon" variant="sidebar" className="">
@@ -116,12 +118,17 @@ export function AppSidebar({ user }: { user?: string }) {
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
+                  <SidebarMenuItem
+                    key={item.title}
+                    className={clsx(
+                      pathName === item.url && "bg-[#4BAE87] rounded-md"
+                    )}
+                  >
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
@@ -131,13 +138,24 @@ export function AppSidebar({ user }: { user?: string }) {
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            <SidebarMenuItem>
-              <div className="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2">
+            <SidebarMenuItem 
+                className="peer/menu-button flex w-full items-center gap-2 overflow-hidden rounded-md p-2 text-left text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 cursor-pointer"
+                onClick={(e) => {
+                  // Prevent event bubbling and find the toggle button
+                  e.preventDefault();
+                  const toggleButton = e.currentTarget.querySelector(
+                    "[data-dark-mode-toggle]"
+                  ) as HTMLButtonElement;
+                  if (toggleButton) {
+                    toggleButton.click();
+                  }
+                }}
+              >
                 <DarkModeToggle />
                 <span className={state === "collapsed" ? "sr-only" : ""}>
                   Dark Mode
                 </span>
-              </div>
+              {/* </button> */}
             </SidebarMenuItem>
             <SidebarMenuItem>
               <DropdownMenu>
@@ -151,12 +169,6 @@ export function AppSidebar({ user }: { user?: string }) {
                   side="top"
                   className={` [--radix-popper-anchor-width] w-full`}
                 >
-                  <DropdownMenuItem>
-                    <span>Account</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <span>Billing</span>
-                  </DropdownMenuItem>
 
                   <DropdownMenuItem asChild>
                     <form action={handleSignOut} className="w-full">

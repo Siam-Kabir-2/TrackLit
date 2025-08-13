@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import AddTransactionModal from "@/components/transactions/AddTransactionModal";
 
-export default function ActionBar() {
+export default function AddTnxModalHelp() {
   const [showAddForm, setShowAddForm] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ export default function ActionBar() {
           className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white"
         >
           <Plus className="h-4 w-4" />
-          Add Transaction
+         <p className="hidden md:block"> Add Transaction</p>
         </Button>
       </div>
       {showAddForm && (

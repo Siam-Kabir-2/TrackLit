@@ -1,5 +1,7 @@
 import Image from "next/image";
 import PieChartAnalytics from "./pieChart";
+import { Suspense } from "react";
+import { PieChartSkeleton } from "../skeletons";
 function getTimeBasedGreeting() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good Morning! ☀️";
@@ -10,7 +12,7 @@ export default function Analytics() {
   const greeting = getTimeBasedGreeting();
 
   return (
-    <div className="space-y-4 md:space-y-6 lg:col-span-1">
+    <div className="space-y-4 md:space-y-6 lg:col-span-1 h-full">
       {/* Welcome Card - Static version without animations */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 md:p-6 shadow-xl border border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-3 md:space-x-4 mb-4">
@@ -33,7 +35,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <PieChartAnalytics />
+      <div className=""><Suspense fallback={<PieChartSkeleton/>}><PieChartAnalytics /></Suspense></div>
     </div>
   );
 }

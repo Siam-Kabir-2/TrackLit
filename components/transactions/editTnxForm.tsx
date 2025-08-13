@@ -14,7 +14,7 @@ export default function AddTransactionModal({
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-            Add New Transaction
+            Edit Transaction
           </h3>
           <Button
             variant="ghost"

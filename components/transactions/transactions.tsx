@@ -1,29 +1,34 @@
+
 import { TransactionCard } from "./tnxCard";
 import { TransactionTable } from "./tnxTable";
-import { getTransactions } from "@/lib/data";
+// import { getTransactions } from "@/lib/data";
+import { getFilteredTransactions } from "@/lib/data";
 export interface TxnCardProps {
   searchTerm?: string;
+  page?: number;
   pathName?: string; // Add this prop to receive real data
 }
 
 export async function TransactionsInfo({
   searchTerm = "",
   pathName,
+  page,
 }: TxnCardProps) {
-  const transactions = await getTransactions();
+  const tnx = await getFilteredTransactions(searchTerm, page);
+  // const transactions = await getTransactions();
   const isTransactionsPage = pathName === "/transactions";
   // Filter transactions based on search term
-  const filteredTransactions = transactions?.filter(
-    (transaction) =>
-      transaction.description
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // const filteredTransactions = transactions?.filter(
+  //   (transaction) =>
+  //     transaction.description
+  //       .toLowerCase()
+  //       .includes(searchTerm.toLowerCase()) ||
+  //     transaction.category.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   const displayTransactions = isTransactionsPage
-    ? filteredTransactions ?? []
-    : (filteredTransactions ?? []).slice(0, 4);
+    ? tnx ?? []
+    : (tnx ?? []).slice(0, 4);
 
   return (
     <>
@@ -33,9 +38,12 @@ export async function TransactionsInfo({
             Recent Transactions
           </h3>
           {!isTransactionsPage && (
-            <button className="text-blue-500 hover:text-blue-600 font-medium text-[11px] transition-colors">
+            <a
+              href="/transactions"
+              className="text-blue-500 hover:text-blue-600 font-medium text-[11px] transition-colors"
+            >
               View All
-            </button>
+            </a>
           )}
         </div>
       )}
@@ -43,7 +51,7 @@ export async function TransactionsInfo({
       {isTransactionsPage ? (
         <TransactionTable transactions={displayTransactions} />
       ) : (
-        <TransactionCard transactions={displayTransactions} />
+        <TransactionCard transactions={displayTransactions} pathname="/transactions"/>
       )}
     </>
   );

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
-import {  register } from "@/lib/actions";
+import { register } from "@/lib/actions";
 import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
@@ -16,10 +16,10 @@ export function SignupForm({
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
- const [errorMessage, formAction] = useActionState(
-  (errorMessage:any, formData: FormData) => register(errorMessage, formData),
-  undefined
-);
+  const [errorMessage, formAction] = useActionState(
+    (errorMessage: any, formData: FormData) => register(errorMessage, formData),
+    undefined
+  );
 
   return (
     <>

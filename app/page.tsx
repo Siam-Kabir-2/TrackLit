@@ -63,12 +63,12 @@ export default function Home() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             
-            <Link
+            {/* <Link
               href="/dashboard"
               className="border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white px-8 py-4 rounded-full font-semibold text-lg transition-colors"
             >
               View Demo
-            </Link>
+            </Link> */}
           </div>
         </div>
       </section>

@@ -1,6 +1,15 @@
 // 'use client'
 // import { useSidebar } from "../ui/sidebar";
-import { Plus, Minus, FileText, Tag, Calendar, DollarSign } from "lucide-react";
+import {
+  Plus,
+  Minus,
+  FileText,
+  Tag,
+  Calendar,
+  DollarSign,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,6 +19,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TransactionCard } from "./tnxCard";
+import { handleDelete } from "@/lib/actions";
+import Link from "next/link";
 
 interface Transaction {
   id: string;
@@ -24,18 +35,14 @@ interface TransactionTableProps {
   transactions: Transaction[];
 }
 
-export function TransactionTable({
-  transactions
-}: TransactionTableProps) {
+export function TransactionTable({ transactions }: TransactionTableProps) {
   // const onMobile=true;
-  const startAnimation=true;
+  const startAnimation = true;
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden shadow-lg">
       {/* Mobile View - Use existing TnxCard component */}
       <div className="block md:hidden">
-        <TransactionCard
-          transactions={transactions}
-        />
+        <TransactionCard transactions={transactions} />
       </div>
 
       {/* Desktop View - Table */}
@@ -66,6 +73,9 @@ export function TransactionTable({
                   <DollarSign className="w-4 h-4" />
                   <span>Amount</span>
                 </div>
+              </TableHead>
+              <TableHead className="text-right font-semibold text-slate-700 dark:text-slate-300 py-4">
+                <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -146,6 +156,40 @@ export function TransactionTable({
                     <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
                       {tnx.type === "INCOME" ? "Credit" : "Debit"}
                     </span>
+                  </div>
+                </TableCell>
+                <TableCell className="text-right py-4">
+                  <div className="flex items-center justify-end space-x-2">
+                    <Link href={`/transactions/${tnx.id}/edit`}>
+                      <button
+                        className="group p-2 rounded-full bg-gradient-to-tr from-blue-100/60 to-blue-300/40 dark:from-blue-900/30 dark:to-blue-700/30 shadow-sm border border-blue-200 dark:border-blue-800 hover:scale-105 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        title="Edit"
+                        aria-label="Edit transaction"
+                        // onClick={() => handleEdit(tnx.id)}
+                      >
+                        <Pencil
+                          size={18}
+                          className="text-blue-600 group-hover:text-blue-800 dark:text-blue-400 dark:group-hover:text-blue-300 transition-colors"
+                        />
+                      </button>
+                    </Link>
+                    <form
+                      action={async () => {
+                        "use server";
+                        await handleDelete(tnx.id);
+                      }}
+                    >
+                      <button
+                        className="group p-2 rounded-full bg-gradient-to-tr from-red-100/60 to-red-300/40 dark:from-red-900/30 dark:to-red-700/30 shadow-sm border border-red-200 dark:border-red-800 hover:scale-105 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-400"
+                        title="Delete"
+                        aria-label="Delete transaction"
+                      >
+                        <Trash2
+                          size={18}
+                          className="text-red-600 group-hover:text-red-800 dark:text-red-400 dark:group-hover:text-red-300 transition-colors"
+                        />
+                      </button>
+                    </form>
                   </div>
                 </TableCell>
               </TableRow>

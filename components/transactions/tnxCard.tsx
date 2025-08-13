@@ -1,6 +1,8 @@
 // 'use client'
+import { handleDelete } from "@/lib/actions";
 import { cn } from "@/lib/utils";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Pencil, Trash2 } from "lucide-react";
+import Link from "next/link";
 // import { useSidebar } from "../ui/sidebar";
 
 interface Transaction {
@@ -14,15 +16,17 @@ interface Transaction {
 
 interface TransactionCardProps {
   transactions: Transaction[];
+  pathname?: string;
 }
 
 export function TransactionCard({
-  transactions
+  transactions,
+  pathname,
 }: TransactionCardProps) {
   // const onMobile=true;
-  const startAnimation=true;
+  const startAnimation = true;
   return (
-    <div className={cn( "space-y-3")}>
+    <div className={cn(pathname=='/transactions' && "space-y-3")}>
       {transactions.map((transaction, index) => (
         <div
           key={transaction.id}
@@ -30,7 +34,7 @@ export function TransactionCard({
             startAnimation
               ? "opacity-100 translate-x-0"
               : "opacity-0 translate-x-4"
-          } ${ "rounded-xl"}`}
+          } ${pathname=='/transactions'?"rounded-xl":""}`}
           style={{ transitionDelay: `${index * 100}ms` }}
         >
           <div className="flex items-center space-x-4">
@@ -60,11 +64,12 @@ export function TransactionCard({
                 {transaction.description}
               </p>
               <p className="text-[10px] text-slate-500 dark:text-slate-400">
-                {transaction.category} • {transaction.transactionDate.toLocaleDateString()}
+                {transaction.category} •{" "}
+                {transaction.transactionDate.toLocaleDateString()}
               </p>
             </div>
           </div>
-          <div className="text-right">
+          <div className="flex items-center space-x-2 text-right">
             <p
               className={`font-bold text-[14px] ml-5 ${
                 transaction.type === "INCOME"
@@ -75,6 +80,33 @@ export function TransactionCard({
               {transaction.type === "INCOME" ? "+" : "-"}$
               {Math.abs(transaction.amount).toFixed(2)}
             </p>
+            {pathname !== "/transactions" && (
+              <>
+               <Link href={`/transactions/${transaction.id}/edit`}>
+                <button
+                  className="ml-2 p-2 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                  title="Edit"
+                  aria-label="Edit transaction"
+                  // onClick={() => handleEdit(transaction.id)}
+                >
+                  <Pencil size={18} className="text-blue-500" />
+                </button></Link>
+                <form
+                                      action={async () => {
+                                        "use server";
+                                        await handleDelete(transaction.id);
+                                      }}
+                                    >
+                <button
+                  className="p-2 rounded-full hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
+                  title="Delete"
+                  aria-label="Delete transaction"
+                  // onClick={() => handleDelete(transaction.id)}
+                >
+                  <Trash2 size={18} className="text-red-500" />
+                </button></form>
+              </>
+            )}
           </div>
         </div>
       ))}

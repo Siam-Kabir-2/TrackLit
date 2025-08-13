@@ -1,38 +1,39 @@
-// "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { addTransaction } from "@/lib/actions";
+import { updateTransaction } from "@/lib/actions";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function AddTransactionModal({
-  onClose,
+export default function UpdateTnxModel({
+  id,
+  prevTnx,
 }: {
-  onClose: () => void;
+  id: string;
+  prevTnx?: {
+    description: string;
+    amount: number;
+    type: "INCOME" | "EXPENSE";
+    category: string;
+    transactionDate: Date;
+  };
 }) {
   const today = new Date().toISOString().split("T")[0];
+
+  // Server action for handling form submission
+  async function handleUpdate(formData: FormData) {
+    "use server";
+    await updateTransaction(id, formData);
+    redirect("/transactions");
+  }
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-gray-700 w-full max-w-md">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-            Add New Transaction
+            Edit Transaction
           </h3>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            ✕
-          </Button>
         </div>
-        <form
-          className="space-y-4"
-          action={async (formData) => {
-            // "use server";
-            await addTransaction(formData);
-            onClose();
-          }}
-        >
+        <form className="space-y-4" action={handleUpdate}>
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
               Description
@@ -42,7 +43,7 @@ export default function AddTransactionModal({
               name="description"
               placeholder="Enter transaction description"
               className="w-full"
-              defaultValue=""
+              defaultValue={prevTnx?.description || ""}
               required
             />
           </div>
@@ -56,7 +57,7 @@ export default function AddTransactionModal({
                 name="amount"
                 placeholder="0.00"
                 className="w-full"
-                defaultValue=""
+                defaultValue={prevTnx?.amount || ""}
                 min="0.01"
                 step="0.01"
                 required
@@ -69,7 +70,7 @@ export default function AddTransactionModal({
               <select
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-slate-200"
                 name="type"
-                defaultValue="expense"
+                defaultValue={prevTnx?.type || "EXPENSE"}
                 required
               >
                 <option value="EXPENSE">Expense</option>
@@ -84,7 +85,7 @@ export default function AddTransactionModal({
             <select
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-slate-700 dark:text-slate-200"
               name="category"
-              defaultValue="FOOD"
+              defaultValue={prevTnx?.category || "FOOD"}
               required
             >
               <option value="FOOD">Food</option>
@@ -106,24 +107,23 @@ export default function AddTransactionModal({
               type="date"
               name="date"
               className="w-full"
-              defaultValue={today}
+              defaultValue={
+                prevTnx?.transactionDate.toISOString().split("T")[0] || today
+              }
               required
             />
           </div>
           <div className="flex gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1"
-            >
-              Cancel
-            </Button>
+            <Link href="/transactions">
+              <Button type="submit" variant="outline" className="flex-1">
+                Cancel
+              </Button>
+            </Link>
             <Button
               type="submit"
-              className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
             >
-              Add Transaction
+              Update Transaction
             </Button>
           </div>
         </form>
