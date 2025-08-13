@@ -1,16 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import {
-  LayoutDashboard,
-  ArrowRightLeft,
-  Menu,
-  X,
-  LogOut
-} from "lucide-react";
+import { LayoutDashboard, ArrowRightLeft, Menu, X, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {  ubuntu } from "@/lib/fonts";
+import { ubuntu } from "@/lib/fonts";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -18,6 +12,7 @@ import {
   DropdownMenuContent,
 } from "@/components/ui/dropdown-menu";
 import DarkModeToggle from "@/components/animations/DarkModeToggle";
+import { handleSignOut } from "@/lib/actions";
 
 // Menu items.
 const items = [
@@ -77,16 +72,16 @@ export function MobileNav({ user }: { user?: string }) {
           {/* Right side - User menu and hamburger */}
           <div className="flex items-center gap-2">
             {/* User Dropdown */}
-              <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5">
-                <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">
-                    {user?.charAt(0).toUpperCase() || "G"}
-                  </span>
-                </div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-20 truncate">
-                  {user || "Guest"}
+            <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-full px-3 py-1.5">
+              <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
+                <span className="text-white text-xs font-bold">
+                  {user?.charAt(0).toUpperCase() || "G"}
                 </span>
               </div>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300 max-w-20 truncate">
+                {user || "Guest"}
+              </span>
+            </div>
             <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
               <DropdownMenuTrigger asChild>
                 <button
@@ -97,19 +92,21 @@ export function MobileNav({ user }: { user?: string }) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40">
-                  <div className={`${ubuntu.variable} flex items-center gap-2 p-[5px] pb-2`}>
-                    <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">
-                        {user?.charAt(0).toUpperCase() || "G"}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-sm font-bold text-success">{user}</p>
-                      <p className="text-[8px] font-semibold text-gray-600 dark:text-gray-400 leading-none">
-                        Welcome Back!
-                      </p>
-                    </div>
+                <div
+                  className={`${ubuntu.variable} flex items-center gap-2 p-[5px] pb-2`}
+                >
+                  <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-sm font-bold">
+                      {user?.charAt(0).toUpperCase() || "G"}
+                    </span>
                   </div>
+                  <div>
+                    <p className="text-sm font-bold text-success">{user}</p>
+                    <p className="text-[8px] font-semibold text-gray-600 dark:text-gray-400 leading-none">
+                      Welcome Back!
+                    </p>
+                  </div>
+                </div>
                 <hr />
                 {items.map((item) => (
                   <DropdownMenuItem
@@ -145,9 +142,13 @@ export function MobileNav({ user }: { user?: string }) {
                   {/* </button> */}
                 </DropdownMenuItem>
                 <hr />
-                <DropdownMenuItem className="w-full flex items-center gap-3">
-                  <LogOut size={18}/>
-                  <span>Sign out</span>
+                <DropdownMenuItem className="w-full flex items-center gap-3 mt-1">
+                  <form action={handleSignOut}>
+                    <button className="w-full h-full flex items-center gap-3">
+                      <LogOut size={18} />
+                      <span>Sign out</span>
+                    </button>
+                  </form>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

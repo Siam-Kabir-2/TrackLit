@@ -9,42 +9,22 @@ export function LoadingIndicator() {
   // Hide loading when route changes
   useEffect(() => {
     setIsLoading(false);
-    // Re-enable all buttons when navigation completes
-    const buttons = document.querySelectorAll('button[data-loading-disabled]');
-    buttons.forEach(btn => {
-      if (btn instanceof HTMLButtonElement) {
-        btn.disabled = false;
-        btn.removeAttribute('data-loading-disabled');
-      }
-    });
-    // Remove loading class from body
-    document.body.classList.remove('navigation-loading');
   }, [pathname]);
+
+  // Auto-hide loading after a reasonable timeout
+  useEffect(() => {
+    if (isLoading) {
+      const timeout = setTimeout(() => {
+        setIsLoading(false);
+      }, 5000); // Auto-hide after 5 seconds
+
+      return () => clearTimeout(timeout);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const handleStart = () => {
       setIsLoading(true);
-      // Add loading class to body
-      document.body.classList.add('navigation-loading');
-      
-      // Disable all navigation and submit buttons
-      const buttonsToDisable = document.querySelectorAll(`
-        button[type="submit"], 
-        a button, 
-        [role="button"], 
-        button:not(.loading-indicator button):not([data-keep-enabled]),
-        .sidebar button,
-        .dropdown-menu button,
-        .nav button,
-        [data-sidebar-menu-button]
-      `);
-      
-      buttonsToDisable.forEach(btn => {
-        if (btn instanceof HTMLButtonElement && !btn.disabled) {
-          btn.disabled = true;
-          btn.setAttribute('data-loading-disabled', 'true');
-        }
-      });
     };
 
     // Intercept all internal link clicks
@@ -61,6 +41,19 @@ export function LoadingIndicator() {
         }
       } else if (button) {
         handleStart();
+
+        // Auto-hide loading after form submission completes
+        // Listen for form submission completion
+        const form = button.closest("form");
+        if (form) {
+          const handleFormSubmit = () => {
+            setTimeout(() => {
+              setIsLoading(false);
+            }, 2000); // Hide after 2 seconds for form submissions
+          };
+
+          form.addEventListener("submit", handleFormSubmit, { once: true });
+        }
       }
     };
 

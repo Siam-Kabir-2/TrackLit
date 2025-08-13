@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useSearchParams } from "next/navigation";
 import { useActionState } from "react";
 import { authenticate } from "@/lib/actions";
-import {AlertCircle} from "lucide-react"
+import { AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 export function LoginForm({
@@ -16,7 +16,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [errorMessage, formAction] = useActionState(
+  const [errorMessage, formAction, isPending] = useActionState(
     authenticate,
     undefined
   );
@@ -61,21 +61,19 @@ export function LoginForm({
                     required
                   />
                 </div>
-                  {errorMessage && <div
-                  className="flex h-8 items-end space-x-1"
-                  aria-live="polite"
-                  aria-atomic="true"
-                >
-                  
-                    
-                      <AlertCircle className="h-5 w-5 text-red-500" />
-                      <p className="text-sm text-red-500">{errorMessage}</p>
-                    
-                  
-                </div>}
+                {errorMessage && (
+                  <div
+                    className="flex h-8 items-end space-x-1"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    <AlertCircle className="h-5 w-5 text-red-500" />
+                    <p className="text-sm text-red-500">{errorMessage}</p>
+                  </div>
+                )}
                 <input type="hidden" name="redirectTo" value={callbackUrl} />
-                <Button type="submit" className="w-full">
-                  Login
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  {isPending ? "Signing in..." : "Login"}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-card text-muted-foreground relative z-10 px-2">
@@ -113,11 +111,13 @@ export function LoginForm({
                 </div>
                 <div className="text-center text-sm">
                   Don&apos;t have an account?{" "}
-                  <a href="#" className="underline underline-offset-4">
+                  <a
+                    href="/auth/signup"
+                    className="underline underline-offset-4"
+                  >
                     Sign up
                   </a>
                 </div>
-               
               </div>
             </form>
             <div className="bg-muted relative hidden md:block">

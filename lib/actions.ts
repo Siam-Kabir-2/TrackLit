@@ -7,7 +7,6 @@ import { getUser } from "./data";
 import { z } from "zod";
 import { hash } from "argon2";
 import { revalidatePath } from "next/cache";
-
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
@@ -45,6 +44,15 @@ export async function authenticate(
   try {
     await signIn("credentials", formData);
   } catch (error) {
+    // Check if it's a redirect error by examining the error message or digest
+    if (
+      error &&
+      typeof error === "object" &&
+      "digest" in error &&
+      String(error.digest).includes("NEXT_REDIRECT")
+    ) {
+      throw error; // Re-throw redirect errors
+    }
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
@@ -92,7 +100,7 @@ export async function register(
 
   const hashedPassword = await hash(password as string);
   try {
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: email as string,
         password: hashedPassword,
@@ -104,10 +112,18 @@ export async function register(
       password: password as string,
       redirectTo: "/dashboard",
     });
-    return user;
   } catch (error) {
+    // Check if it's a redirect error by examining the error message or digest
+    if (
+      error &&
+      typeof error === "object" &&
+      "digest" in error &&
+      String(error.digest).includes("NEXT_REDIRECT")
+    ) {
+      throw error; // Re-throw redirect errors to allow successful redirection
+    }
     console.error("Failed to create user:", error);
-    throw new Error("Failed to create user.");
+    return "Failed to create user.";
   }
 }
 
@@ -158,7 +174,7 @@ export async function addTransaction(formData: FormData) {
   // Optionally revalidate or return success
   revalidatePath("/transactions");
 }
-export async function updateTransaction(id:string,formData: FormData) {
+export async function updateTransaction(id: string, formData: FormData) {
   const description = formData.get("description");
   const amount = formData.get("amount");
   const type = formData.get("type");

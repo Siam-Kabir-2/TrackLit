@@ -4,7 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { ubuntu } from "@/lib/fonts";
 import ConditionalMain from "@/components/ConditionalMain";
 import { currUser } from "@/lib/actions";
-import { LoadingIndicator } from "@/components/ui/loading-indicator";
+import { LoadingIndicator } from "@/components/ui/Loader";
 
 export const metadata: Metadata = {
   title: "Personal Finance Tracker",
@@ -23,7 +23,7 @@ export default async function RootLayout({
       <body
         className={`font-[ubuntu] antialiased overflow-x-hidden `}
       >
-        <LoadingIndicator />
+        <LoadingIndicator/>
         <SidebarProvider defaultOpen={true}>
           <ConditionalMain user={user?.username || "Guest"}>{children}
           </ConditionalMain >

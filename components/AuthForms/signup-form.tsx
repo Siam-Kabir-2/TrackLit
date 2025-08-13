@@ -16,7 +16,7 @@ export function SignupForm({
 }: React.ComponentProps<"div">) {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
-  const [errorMessage, formAction] = useActionState(
+  const [errorMessage, formAction, isPending] = useActionState(
     (errorMessage: any, formData: FormData) => register(errorMessage, formData),
     undefined
   );
@@ -85,8 +85,8 @@ export function SignupForm({
                   </div>
                 )}
                 <input type="hidden" name="redirectTo" value={callbackUrl} />
-                <Button type="submit" className="w-full">
-                  SignUp
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  {isPending ? "Creating account..." : "SignUp"}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-card text-muted-foreground relative z-10 px-2">
