@@ -5,9 +5,10 @@ import { notFound } from "next/navigation";
 export default async function updateTnx({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const tnx = await getTransaction(params.id);
+  const { id } = await params;
+  const tnx = await getTransaction(id);
 
   if (!tnx) {
     notFound();
@@ -15,7 +16,7 @@ export default async function updateTnx({
 
   return (
     <>
-      <UpdateTnxModel id={params.id} prevTnx={tnx} />
+      <UpdateTnxModel id={id} prevTnx={tnx} />
     </>
   );
 }

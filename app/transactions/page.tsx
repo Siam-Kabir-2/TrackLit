@@ -1,13 +1,16 @@
-
 import { TransactionsInfo } from "@/components/transactions/transactions";
 import Search from "@/components/transactions/search";
-import {  getTransactionsPages } from "@/lib/data";
+import { getTransactionsPages } from "@/lib/data";
 import Pagination from "@/components/transactions/Pagination";
 import AddTnxModalHelp from "@/components/transactions/addtnxmodalhelper";
 import { TransactionTableSkeleton } from "@/components/skeletons";
 import { Suspense } from "react";
 
-export default async function TnxPage({ searchParams }: { searchParams: any }) {
+export default async function TnxPage({
+  searchParams,
+}: {
+  searchParams: Promise<any>;
+}) {
   const params = await searchParams;
   const search = params?.query || "";
   const page = Number(params?.page) || 1;
@@ -25,7 +28,13 @@ export default async function TnxPage({ searchParams }: { searchParams: any }) {
           <AddTnxModalHelp />
         </div>
         <div className="w-full">
-          <Suspense fallback={<TransactionTableSkeleton/>}><TransactionsInfo pathName="/transactions" searchTerm={search} page={page}/></Suspense>
+          <Suspense fallback={<TransactionTableSkeleton />}>
+            <TransactionsInfo
+              pathName="/transactions"
+              searchTerm={search}
+              page={page}
+            />
+          </Suspense>
         </div>
         <Pagination currentPage={page} totalPages={totalPages} query={search} />
       </div>
